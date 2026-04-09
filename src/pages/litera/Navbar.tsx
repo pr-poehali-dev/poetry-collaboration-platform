@@ -125,6 +125,15 @@ export default function Navbar({
               {item.label}
             </button>
           ))}
+          <div className="pt-2 border-t border-border">
+            <button
+              onClick={() => { setSupportModalOpen(true); setMenuOpen(false); }}
+              className="flex items-center gap-2 text-sm text-gold uppercase tracking-wider"
+            >
+              <Icon name="Heart" size={14} />
+              Поддержать сайт
+            </button>
+          </div>
         </div>
       )}
     </nav>
