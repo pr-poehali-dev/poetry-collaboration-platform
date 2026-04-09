@@ -11,6 +11,8 @@ import {
   AboutSection,
   ContactsSection,
 } from "./litera/ContentSections";
+import { useAuth } from "./litera/useAuth";
+import AuthModal from "./litera/AuthModal";
 
 export default function Index() {
   const [activeSection, setActiveSection] = useState<Section>("home");
@@ -20,6 +22,9 @@ export default function Index() {
   const [favPoems, setFavPoems] = useState<number[]>([2, 5]);
   const [subscribedAuthors, setSubscribedAuthors] = useState<number[]>([2]);
   const [playingTrack, setPlayingTrack] = useState<number | null>(null);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+
+  const { user, login, register, logout } = useAuth();
 
   const toggleFav = (id: number) => {
     setFavPoems(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
@@ -40,6 +45,9 @@ export default function Index() {
         setSearchOpen={setSearchOpen}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
+        user={user}
+        onAuthClick={() => setAuthModalOpen(true)}
+        onLogout={logout}
       />
 
       <main className="pt-16">
@@ -54,6 +62,8 @@ export default function Index() {
           <ProfileSection
             favPoems={favPoems}
             toggleFav={toggleFav}
+            user={user}
+            onAuthClick={() => setAuthModalOpen(true)}
           />
         )}
         {activeSection === "poems" && (
@@ -84,6 +94,14 @@ export default function Index() {
 
       {activeSection !== "music" && (
         <Footer setActiveSection={setActiveSection} />
+      )}
+
+      {authModalOpen && (
+        <AuthModal
+          onClose={() => setAuthModalOpen(false)}
+          onLogin={login}
+          onRegister={register}
+        />
       )}
     </div>
   );

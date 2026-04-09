@@ -1,37 +1,55 @@
 import { useState } from "react";
 import Icon from "@/components/ui/icon";
 import { Section, poems, books, musicians, authors, HERO_IMG, MUSIC_IMG, AUTHOR_IMG } from "./data";
+import { AuthUser } from "./useAuth";
 
 // ── PROFILE ───────────────────────────────────────────────────────────────────
 
 interface ProfileSectionProps {
   favPoems: number[];
   toggleFav: (id: number) => void;
+  user: AuthUser | null;
+  onAuthClick: () => void;
 }
 
-export function ProfileSection({ favPoems, toggleFav }: ProfileSectionProps) {
+export function ProfileSection({ favPoems, toggleFav, user, onAuthClick }: ProfileSectionProps) {
+  if (!user) {
+    return (
+      <div className="animate-fade-in max-w-5xl mx-auto px-6 py-32 text-center">
+        <Icon name="User" size={48} className="mx-auto mb-6 text-muted-foreground/30" />
+        <h1 className="font-display text-4xl mb-4">Войдите в аккаунт</h1>
+        <p className="text-muted-foreground mb-8">Чтобы увидеть профиль, нужно войти или зарегистрироваться.</p>
+        <button onClick={onAuthClick} className="px-8 py-3 bg-gold text-background text-sm uppercase tracking-widest hover:opacity-90 transition-opacity">
+          Войти / Регистрация
+        </button>
+      </div>
+    );
+  }
+
+  const roleLabel = user.role === "author" ? "Автор" : "Читатель";
+
   return (
     <div className="animate-fade-in max-w-5xl mx-auto px-6 py-16">
       <div className="flex items-start gap-12 mb-16">
         <div className="relative">
-          <div className="w-36 h-36 overflow-hidden border-2 border-gold/30">
-            <img src={AUTHOR_IMG} alt="Профиль" className="w-full h-full object-cover" />
+          <div className="w-36 h-36 overflow-hidden border-2 border-gold/30 bg-muted flex items-center justify-center">
+            {user.avatar_url ? (
+              <img src={user.avatar_url} alt={user.name} className="w-full h-full object-cover" />
+            ) : (
+              <Icon name="User" size={48} className="text-muted-foreground/40" />
+            )}
           </div>
           <button className="absolute bottom-2 right-2 w-8 h-8 bg-gold text-background flex items-center justify-center">
             <Icon name="Camera" size={14} />
           </button>
         </div>
         <div className="flex-1">
-          <h1 className="font-display text-5xl mb-2">Анна Светлова</h1>
-          <p className="text-gold text-sm uppercase tracking-widest mb-4">Поэт · Прозаик</p>
+          <h1 className="font-display text-5xl mb-2">{user.name}</h1>
+          <p className="text-gold text-sm uppercase tracking-widest mb-4">{roleLabel}</p>
           <p className="text-muted-foreground leading-relaxed max-w-xl">
-            Пишу о том, что нельзя не написать. Слова — мой способ дышать. Лауреат премии «Золотое перо» 2023.
+            {user.bio || "Расскажите о себе — отредактируйте профиль."}
           </p>
-          <div className="flex gap-8 mt-6 text-sm">
-            <div><span className="font-display text-3xl text-gold">34</span><span className="text-muted-foreground ml-2 text-xs uppercase tracking-widest">Работ</span></div>
-            <div><span className="font-display text-3xl text-gold">2.1к</span><span className="text-muted-foreground ml-2 text-xs uppercase tracking-widest">Подписчиков</span></div>
-            <div><span className="font-display text-3xl text-gold">142</span><span className="text-muted-foreground ml-2 text-xs uppercase tracking-widest">Лайков</span></div>
-          </div>
+          <p className="text-xs text-muted-foreground/40 mt-2">{user.email}</p>
           <div className="flex gap-3 mt-6">
             <button className="px-6 py-2 bg-gold text-background text-sm uppercase tracking-widest hover:opacity-90 transition-opacity">
               Редактировать

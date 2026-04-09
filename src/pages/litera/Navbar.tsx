@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Icon from "@/components/ui/icon";
 import { Section, navItems } from "./data";
+import { AuthUser } from "./useAuth";
 
 interface NavbarProps {
   activeSection: Section;
@@ -11,6 +12,9 @@ interface NavbarProps {
   setSearchOpen: (v: boolean) => void;
   searchQuery: string;
   setSearchQuery: (v: string) => void;
+  user: AuthUser | null;
+  onAuthClick: () => void;
+  onLogout: () => void;
 }
 
 export default function Navbar({
@@ -22,6 +26,9 @@ export default function Navbar({
   setSearchOpen,
   searchQuery,
   setSearchQuery,
+  user,
+  onAuthClick,
+  onLogout,
 }: NavbarProps) {
   const [supportModalOpen, setSupportModalOpen] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -77,12 +84,24 @@ export default function Navbar({
             <Icon name="Heart" size={14} />
             Поддержать сайт
           </button>
-          <button
-            className="hidden md:flex items-center gap-2 px-4 py-1.5 border border-gold text-gold text-sm hover:bg-gold hover:text-background transition-all"
-            onClick={() => {}}
-          >
-            Войти
-          </button>
+          {user ? (
+            <div className="hidden md:flex items-center gap-2">
+              <span className="text-sm text-muted-foreground">{user.name}</span>
+              <button
+                className="px-4 py-1.5 border border-border text-muted-foreground text-sm hover:border-foreground hover:text-foreground transition-all"
+                onClick={onLogout}
+              >
+                Выйти
+              </button>
+            </div>
+          ) : (
+            <button
+              className="hidden md:flex items-center gap-2 px-4 py-1.5 border border-gold text-gold text-sm hover:bg-gold hover:text-background transition-all"
+              onClick={onAuthClick}
+            >
+              Войти
+            </button>
+          )}
           <button
             className="md:hidden p-2 text-muted-foreground"
             onClick={() => setMenuOpen(!menuOpen)}
@@ -125,7 +144,7 @@ export default function Navbar({
               {item.label}
             </button>
           ))}
-          <div className="pt-2 border-t border-border">
+          <div className="pt-2 border-t border-border space-y-3">
             <button
               onClick={() => { setSupportModalOpen(true); setMenuOpen(false); }}
               className="flex items-center gap-2 text-sm text-gold uppercase tracking-wider"
@@ -133,13 +152,24 @@ export default function Navbar({
               <Icon name="Heart" size={14} />
               Поддержать сайт
             </button>
+            {user ? (
+              <div>
+                <p className="text-xs text-muted-foreground mb-1">{user.name}</p>
+                <button onClick={() => { onLogout(); setMenuOpen(false); }} className="text-sm text-muted-foreground uppercase tracking-wider">
+                  Выйти
+                </button>
+              </div>
+            ) : (
+              <button onClick={() => { onAuthClick(); setMenuOpen(false); }} className="text-sm text-gold uppercase tracking-wider">
+                Войти / Регистрация
+              </button>
+            )}
           </div>
         </div>
       )}
     </nav>
 
     {supportModalOpen && (
-
       <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div className="bg-card border border-border w-full max-w-sm p-8">
           <div className="flex items-start justify-between mb-6">

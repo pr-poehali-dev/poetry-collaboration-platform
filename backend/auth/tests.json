@@ -1,0 +1,30 @@
+{
+  "tests": [
+    {
+      "name": "GET ?action=me без сессии",
+      "method": "GET",
+      "path": "/?action=me",
+      "expectedStatus": 200,
+      "expectedBody": {"user": null},
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "POST ?action=register новый пользователь",
+      "method": "POST",
+      "path": "/?action=register",
+      "body": {"name": "Тест Пользователь", "email": "test_litera_99@example.com", "password": "test123", "role": "reader"},
+      "expectedStatus": 200,
+      "expectedBody": {"session_id": "string"},
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "POST ?action=login неверный пароль",
+      "method": "POST",
+      "path": "/?action=login",
+      "body": {"email": "notexist@example.com", "password": "wrong"},
+      "expectedStatus": 401,
+      "expectedBody": {"error": "string"},
+      "bodyMatcher": "partial"
+    }
+  ]
+}
