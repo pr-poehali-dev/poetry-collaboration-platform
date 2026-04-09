@@ -60,6 +60,13 @@ export default function Navbar({
             <Icon name="User" size={18} />
           </button>
           <button
+            className="hidden md:flex items-center gap-2 px-4 py-1.5 bg-gold/10 border border-gold/40 text-gold text-sm hover:bg-gold hover:text-background transition-all"
+            onClick={() => {}}
+          >
+            <Icon name="Heart" size={14} />
+            Поддержать сайт
+          </button>
+          <button
             className="hidden md:flex items-center gap-2 px-4 py-1.5 border border-gold text-gold text-sm hover:bg-gold hover:text-background transition-all"
             onClick={() => {}}
           >
