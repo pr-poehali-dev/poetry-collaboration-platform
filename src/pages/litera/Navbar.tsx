@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Icon from "@/components/ui/icon";
 import { Section, navItems } from "./data";
 
@@ -22,7 +23,17 @@ export default function Navbar({
   searchQuery,
   setSearchQuery,
 }: NavbarProps) {
+  const [supportModalOpen, setSupportModalOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const copyCard = () => {
+    navigator.clipboard.writeText("5228600527576708");
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   return (
+    <>
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/90 backdrop-blur-sm">
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
         <button
@@ -61,7 +72,7 @@ export default function Navbar({
           </button>
           <button
             className="hidden md:flex items-center gap-2 px-4 py-1.5 bg-gold/10 border border-gold/40 text-gold text-sm hover:bg-gold hover:text-background transition-all"
-            onClick={() => {}}
+            onClick={() => setSupportModalOpen(true)}
           >
             <Icon name="Heart" size={14} />
             Поддержать сайт
@@ -117,5 +128,43 @@ export default function Navbar({
         </div>
       )}
     </nav>
+
+    {supportModalOpen && (
+
+      <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="bg-card border border-border w-full max-w-sm p-8">
+          <div className="flex items-start justify-between mb-6">
+            <h3 className="font-display text-2xl">Поддержать сайт</h3>
+            <button onClick={() => setSupportModalOpen(false)} className="text-muted-foreground hover:text-foreground">
+              <Icon name="X" size={18} />
+            </button>
+          </div>
+          <p className="text-sm text-muted-foreground leading-relaxed mb-6">
+            Спасибо, что цените нашу работу! Переведите любую сумму на карту:
+          </p>
+          <div className="border border-border p-4 mb-3">
+            <div className="text-xs text-muted-foreground/60 uppercase tracking-widest mb-1">Банк</div>
+            <div className="font-body text-sm">Сбербанк</div>
+          </div>
+          <div
+            className="border border-border p-4 flex items-center justify-between cursor-pointer hover:border-gold transition-colors group"
+            onClick={copyCard}
+          >
+            <div>
+              <div className="text-xs text-muted-foreground/60 uppercase tracking-widest mb-1">Номер карты</div>
+              <div className="font-body text-lg tracking-widest">5228 6005 2757 6708</div>
+            </div>
+            <div className={`flex items-center gap-1.5 text-xs transition-colors ${copied ? "text-gold" : "text-muted-foreground/40 group-hover:text-gold"}`}>
+              <Icon name={copied ? "Check" : "Copy"} size={14} />
+              {copied ? "Скопировано" : "Копировать"}
+            </div>
+          </div>
+          <p className="text-xs text-muted-foreground/40 mt-4 text-center">
+            Нажмите на карту, чтобы скопировать номер
+          </p>
+        </div>
+      </div>
+    )}
+    </>
   );
 }
