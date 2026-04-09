@@ -419,20 +419,18 @@ export function AboutSection() {
         </div>
         <div className="border-t border-border pt-12">
           <h2 className="font-display text-3xl mb-8 text-center">Команда</h2>
-          <div className="grid grid-cols-3 gap-6">
-            {[
-              { role: "Основатель", name: "Артём Волков" },
-              { role: "Редактор", name: "Мария Сонина" },
-              { role: "Разработка", name: "Илья Крест" },
-            ].map((member, i) => (
-              <div key={i} className="text-center">
-                <div className="w-16 h-16 bg-border mx-auto mb-3 flex items-center justify-center">
-                  <Icon name="User" size={24} className="text-muted-foreground" />
-                </div>
-                <div className="font-display text-lg">{member.name}</div>
-                <div className="text-xs text-gold uppercase tracking-widest mt-1">{member.role}</div>
+          <div className="flex justify-center">
+            <div className="text-center max-w-xs">
+              <div className="w-24 h-24 bg-border mx-auto mb-4 flex items-center justify-center overflow-hidden border border-gold/20">
+                <Icon name="User" size={36} className="text-muted-foreground/40" />
               </div>
-            ))}
+              <div className="font-display text-xl mb-1">Батыров Абдулхаким Арсенович</div>
+              <div className="flex justify-center gap-3 mt-2">
+                {["Основатель", "Редактор", "Разработка"].map(r => (
+                  <span key={r} className="text-xs text-gold uppercase tracking-widest">{r}</span>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>
